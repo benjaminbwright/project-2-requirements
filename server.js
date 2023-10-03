@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const sequelize = require("./config/connection");
 const exphbs = require("express-handlebars");
 
 const router = require("./routes");
@@ -14,6 +15,9 @@ app.set("view engine", "handlebars");
 
 app.use("/", router);
 
-app.listen(PORT, () => {
-  console.log(`Express server is running on port ${PORT}`);
+sequelize.sync({ force: true }).then(() => {
+  console.log(`Sequelize-MySQL connection established`);
+  app.listen(PORT, () => {
+    console.log(`Express server is running on port ${PORT}`);
+  });
 });
